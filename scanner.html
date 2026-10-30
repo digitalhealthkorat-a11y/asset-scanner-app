@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>สแกนบาร์โค้ด - IT Asset Management</title>
+  <title>สแกน QR - IT Asset Management</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -25,7 +25,7 @@
 </head>
 <body>
   <header>
-    <h1>สแกนบาร์โค้ด / QR</h1>
+    <h1>สแกน QR ครุภัณฑ์</h1>
     <a id="backBtn" class="btn btn-light" href="#">กลับ</a>
   </header>
   <main>
@@ -37,7 +37,7 @@
       <button class="btn btn-light" id="torchBtn" style="display:none">🔦 ไฟฉาย</button>
     </div>
     <p id="status">กำลังเปิดกล้อง...</p>
-    <p id="tips">บาร์โค้ดยาว/แท่งถี่: วางให้แนวนอนเต็มกรอบ ถือห่าง 15–25 ซม. แล้วกดซูม 2x<br>หลีกเลี่ยงแสงสะท้อนบนสติกเกอร์ ถ้ามืดให้เปิดไฟฉาย</p>
+    <p id="tips">สติกเกอร์ QR เล็ก (1.5 ซม.): ถือห่างประมาณ 8–12 ซม. ให้ QR อยู่กลางกรอบ<br>ถ้าโฟกัสไม่ชัด ให้ถอยออกเล็กน้อยแล้วกดซูม 2x · หลีกเลี่ยงแสงสะท้อน ถ้ามืดให้เปิดไฟฉาย</p>
   </main>
 
   <script>
@@ -78,8 +78,7 @@
     async function startScanner() {
       const F = Html5QrcodeSupportedFormats;
       const scanner = new Html5Qrcode('reader', {
-        formatsToSupport: [F.CODE_128, F.CODE_39, F.CODE_93, F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODABAR, F.ITF,
-                           F.QR_CODE, F.DATA_MATRIX, F.PDF_417, F.AZTEC],
+        formatsToSupport: [F.QR_CODE], // สติกเกอร์ติดเครื่องเป็น QR: อ่านเฉพาะ QR เร็วและแม่นกว่า
         experimentalFeatures: { useBarCodeDetectorIfSupported: true },
         verbose: false
       });
@@ -87,8 +86,8 @@
 
       const config = {
         fps: 15,
-        // กรอบกว้างเกือบเต็มจอและเตี้ย เหมาะกับบาร์โค้ด 1D ที่ยาว
-        qrbox: (w, h) => ({ width: Math.max(50, Math.floor(w * 0.95)), height: Math.max(50, Math.floor(Math.min(w, h) * 0.45)) }),
+        // กรอบสแกนสี่เหลี่ยมจัตุรัสสำหรับ QR
+        qrbox: (w, h) => { const s = Math.max(50, Math.floor(Math.min(w, h) * 0.7)); return { width: s, height: s }; },
         // ขอความละเอียดสูง (ค่าเริ่มต้นของเบราว์เซอร์มักต่ำเกินไปสำหรับบาร์โค้ดแท่งถี่) + โฟกัสอัตโนมัติต่อเนื่อง
         videoConstraints: {
           facingMode: 'environment',
